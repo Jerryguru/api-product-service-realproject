@@ -1,0 +1,93 @@
+package com.ar.product.service.realproject.controller;
+
+
+
+import com.ar.product.service.realproject.entity.Product;
+import com.ar.product.service.realproject.service.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+// Here We are going to expose the End Points (Rest APIS)@RestController   // it is going to handels the RestApi Request and return the data that data is usually Jason Data
+@RestController
+@RequestMapping("/products") // here it is a  defines the Base URl for all APIS in this cotroller
+public class ProductController {
+
+    private ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
+    //Insert  the data into the DB
+    //Add HTTP Method : POSTMAPPING
+    @PostMapping("/addProduct")
+    public ResponseEntity<Product> saveProduct(@RequestBody Product product) {
+        Product productResp = productService.saveProduct(product);
+        return new ResponseEntity<>(productResp, HttpStatus.CREATED);
+    }
+
+    // Retrive all the records from DB
+    @GetMapping("/allProducts")
+    public ResponseEntity<List<Product>> getAllProducts() {
+        List<Product> products = productService.getAllProducts();
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    // Based on the id u need to get the data
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) {
+        Product resp = productService.getProductById(id);
+        return new ResponseEntity<>(resp, HttpStatus.OK);
+    }
+
+    // PutMapping it is used to Update an Entire Resorse
+    @PutMapping("/{id}/updateProduct")
+    public ResponseEntity<Product> updateProduct(@PathVariable("id") Long id,
+                                                 @RequestBody Product product) {
+        Product updateProduct = productService.updateProduct(id, product);
+        return new ResponseEntity<>(updateProduct, HttpStatus.CREATED);
+
+    }
+
+    // PatchMapping it is going to Partially Update a Resorse (Particular Data What We want to update )
+    @PatchMapping("{id}/partialUpdate")
+    public ResponseEntity<Product> partiallyUpdateProduct(@PathVariable("id") Long id,
+                                                          @RequestBody Product product) {
+        Product productResp = productService.partiallyUpdateProduct(id, product);
+        return new ResponseEntity<>(productResp, HttpStatus.CREATED);
+
+
+    }
+
+    // if We Want to Delete Any Record  in the DB Level Then we will use the DeleteMapping
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable("id") Long id){
+        String delete =   productService.deleteById(id);
+        return  new ResponseEntity<>(delete , HttpStatus.OK);
+    }
+
+    // Now if we want to search by Name This is the proces now
+   /* @GetMapping("/name/{productName}")
+    public  ResponseEntity<List<Product>>
+                                    getAllProductByProductName(@PathVariable String productName){
+       List<Product> products= productService.getAllProductByProductName(productName);
+        return new ResponseEntity<>(products , HttpStatus.OK);
+    }*/
+
+    @GetMapping("/name")
+    public  ResponseEntity<List<Product>>
+    getAllProductByProductName(
+            @RequestParam("productName") String productName,
+            @RequestParam("category") String category)
+    {
+        List<Product> products= productService.getAllProductByProductName(productName,category);
+        return new ResponseEntity<>(products , HttpStatus.OK);
+    }
+
+
+}
+
