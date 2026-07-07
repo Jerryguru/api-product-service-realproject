@@ -1,3 +1,52 @@
+
+package com.ar.product.service.realproject.service;
+
+import com.ar.product.service.realproject.entity.Product;
+import com.ar.product.service.realproject.model.ProductRequest;
+import com.ar.product.service.realproject.model.ProductResponse;
+
+import java.util.List;
+
+public interface ProductService {
+
+    // Create Product
+    ProductResponse saveProduct(ProductRequest request);
+
+    // Get All Products
+    List<ProductResponse> getAllProducts();
+
+    // Get Product By Id
+    ProductResponse getProductById(Long id);
+
+    // Update Complete Product (PUT)
+    ProductResponse updateProduct(Long id, ProductRequest request);
+
+    // Update Partial Product (PATCH)
+    ProductResponse partiallyUpdateProduct(Long id, ProductRequest request);
+
+    // Delete Product
+    String deleteById(Long id);
+
+    // Search Products
+    List<Product> getAllProductByProductName(String productName, String category);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 package com.ar.product.service.realproject.service;
 
 
@@ -31,3 +80,4 @@ public interface ProductService {
 
     List<Product> getAllProductByProductName(String productName,String category);
 }
+*/
