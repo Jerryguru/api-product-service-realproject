@@ -2,6 +2,7 @@
 package com.ar.product.service.realproject.service.impl;
 
 import com.ar.product.service.realproject.entity.Product;
+import com.ar.product.service.realproject.exception.ProductNotFoundException;
 import com.ar.product.service.realproject.model.ProductRequest;
 import com.ar.product.service.realproject.model.ProductResponse;
 import com.ar.product.service.realproject.repository.ProductRepository;
@@ -96,11 +97,18 @@ public class ProductServiceImpl implements ProductService {
     // Private Helper Methods
     // ===========================
 
-    private Product getProduct(Long id) {
+   /* private Product getProduct(Long id) {
 
         return productRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Product not found with id " + id));
+    }*/
+
+    private Product getProduct(Long id) {
+
+        return productRepository.findById(id)
+                .orElseThrow(() ->
+                        new ProductNotFoundException("Product not found with ID: " + id));
     }
 
     private Product mapRequestToEntity(ProductRequest request) {
@@ -185,6 +193,10 @@ public class ProductServiceImpl implements ProductService {
 
         product.setUpdatedDate(LocalDateTime.now());
     }
+
+
+
+
 }
 
 
