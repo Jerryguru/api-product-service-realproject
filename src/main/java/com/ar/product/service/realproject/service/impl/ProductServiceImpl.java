@@ -101,6 +101,24 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findByProductNameAndCategory(productName, category);
     }
 
+    @Override
+    public boolean updateStock(Long id, int quantity) {
+        log.info("Updating Stock for Product {}: quantity{}",id,quantity);
+        // now Fething the data with ID here
+      Product product =  productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product Not Found with Id "+id));
+      // now update the stock now i need to
+        int newStock = product.getQuantity()+ quantity;
+        if (newStock < 0){
+            log.warn("Insufficient stock for Product {} : quantity {}",id,quantity);
+            return  false;
+        }
+        product.setQuantity(newStock);
+        productRepository.save(product);
+        log.info("Product updated. New Stock:{}",newStock);
+        return true;
+    }
+
 
     // ===========================
     // Private Helper Methods

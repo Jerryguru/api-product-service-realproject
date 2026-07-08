@@ -123,6 +123,28 @@ public class ProductController {
 
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
+
+
+    // ==========================
+    // Update Stock
+    // ==========================
+    @PutMapping("/{id}/stock")
+    public ResponseEntity<String> updateStock(@PathVariable Long id,
+                                              @RequestParam int quantity) {
+
+        log.info("Received request to update stock for product id : {} with quantity : {}", id, quantity);
+
+        boolean success = productService.updateStock(id, quantity);
+
+        if (success) {
+            log.info("Stock updated successfully for product id : {}", id);
+            return ResponseEntity.ok("Stock updated successfully");
+        } else {
+            log.warn("Stock update failed for product id : {} due to insufficient stock", id);
+            return ResponseEntity.badRequest().body("Insufficient Stock");
+        }
+    }
+
 }
 
 

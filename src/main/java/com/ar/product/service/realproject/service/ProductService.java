@@ -29,6 +29,8 @@ public interface ProductService {
 
     // Search Products
     List<Product> getAllProductByProductName(String productName, String category);
+
+    boolean updateStock(Long id, int quantity);
 }
 
 

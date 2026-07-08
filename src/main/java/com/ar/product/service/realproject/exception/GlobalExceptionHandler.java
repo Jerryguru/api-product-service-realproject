@@ -13,6 +13,7 @@ public class GlobalExceptionHandler {
 @ExceptionHandler(ProductNotFoundException.class)
 public ResponseEntity<ErrorResponse> handleProductNotFoundException
                                                 (ProductNotFoundException e){
+   // log.error("Exception occurred :{}",e.getMessage());
     ErrorResponse response = ErrorResponse.builder()
             .timestamp(LocalDateTime.now())
             .status(HttpStatus.NOT_FOUND.value())
