@@ -7,11 +7,13 @@ import com.ar.product.service.realproject.model.ProductRequest;
 import com.ar.product.service.realproject.model.ProductResponse;
 import com.ar.product.service.realproject.repository.ProductRepository;
 import com.ar.product.service.realproject.service.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -23,10 +25,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse saveProduct(ProductRequest request) {
-
+        log.info("Saving product : {}", request.getProductName());
         Product product = mapRequestToEntity(request);
-
         Product savedProduct = productRepository.save(product);
+        log.info("Product saved successfully with id : {}", savedProduct.getId());
 
         return mapEntityToResponse(savedProduct);
     }
@@ -34,8 +36,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponse> getAllProducts() {
-
+        log.info("Fetching all products");
         List<Product> products = productRepository.findAll();
+        log.info("Found {} products", products.size());
 
         return products.stream()
                 .map(this::mapEntityToResponse)
@@ -44,8 +47,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse getProductById(Long id) {
-
+        log.info("Fetching product with id : {}", id);
         Product product = getProduct(id);
+        log.info("Product fetched successfully with id : {}", id);
 
         return mapEntityToResponse(product);
     }
@@ -53,42 +57,47 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse updateProduct(Long id, ProductRequest request) {
-
+        log.info("Updating product with id : {}", id);
         Product product = getProduct(id);
 
         updateEntityFromRequest(product, request);
 
         Product updatedProduct = productRepository.save(product);
+        log.info("Product updated successfully with id : {}", id);
 
         return mapEntityToResponse(updatedProduct);
     }
 
     @Override
     public ProductResponse partiallyUpdateProduct(Long id, ProductRequest request) {
-
+        log.info("Partially updating product with id : {}", id);
         Product product = getProduct(id);
 
         partialUpdateEntity(product, request);
 
         Product updatedProduct = productRepository.save(product);
-
+        log.info("Product partially updated successfully with id : {}", id);
         return mapEntityToResponse(updatedProduct);
     }
 
 
     @Override
     public String deleteById(Long id) {
-
+        log.info("Deleting product with id : {}", id);
         Product product = getProduct(id);
 
         productRepository.delete(product);
-
+        log.info("Product deleted successfully with id : {}", id);
         return "Product deleted successfully.";
     }
 
     @Override
     public List<Product> getAllProductByProductName(String productName, String category) {
+        log.info("Searching products by name : {} and category : {}", productName, category);
+        List<Product> products =
+                productRepository.findByProductNameAndCategory(productName, category);
 
+        log.info("Found {} matching products", products.size());
         return productRepository.findByProductNameAndCategory(productName, category);
     }
 
@@ -105,10 +114,11 @@ public class ProductServiceImpl implements ProductService {
     }*/
 
     private Product getProduct(Long id) {
-
+        log.debug("Searching product in database with id : {}", id);
         return productRepository.findById(id)
-                .orElseThrow(() ->
-                        new ProductNotFoundException("Product not found with ID: " + id));
+                .orElseThrow(() ->{
+                    log.error("Product not found with id : {}", id);
+                    return     new ProductNotFoundException("Product not found with ID: " + id);});
     }
 
     private Product mapRequestToEntity(ProductRequest request) {

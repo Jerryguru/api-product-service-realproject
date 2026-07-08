@@ -4,6 +4,7 @@ import com.ar.product.service.realproject.entity.Product;
 import com.ar.product.service.realproject.model.ProductRequest;
 import com.ar.product.service.realproject.model.ProductResponse;
 import com.ar.product.service.realproject.service.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
+@Slf4j
 public class ProductController {
+
+   // private  static final  Looger looger = LoogerFactory.getLooger(ProductController.class);
 
     private final ProductService productService;
 
@@ -28,8 +32,9 @@ public class ProductController {
     public ResponseEntity<ProductResponse> saveProduct(
             @RequestBody ProductRequest request) {
 
+    log.info("Recevied request to create product: {}",request.getProductName());
         ProductResponse response = productService.saveProduct(request);
-
+    log.info("Returningcreated  product  with id : {}",response.getId());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -39,9 +44,10 @@ public class ProductController {
 
     @GetMapping("/allProducts")
     public ResponseEntity<List<ProductResponse>> getAllProducts() {
+        log.info("Resived request  to featch all  products");
 
         List<ProductResponse> response = productService.getAllProducts();
-
+        log.info("Returning {} products",response.size());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -50,10 +56,11 @@ public class ProductController {
     // ==========================
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> getProductById(
-            @PathVariable Long id) {
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id) {
+        log.info("Received request to fetch product with id : {}", id);
 
         ProductResponse response = productService.getProductById(id);
+        log.info("Returning product with id : {}", id);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -66,9 +73,9 @@ public class ProductController {
     public ResponseEntity<ProductResponse> updateProduct(
             @PathVariable Long id,
             @RequestBody ProductRequest request) {
-
+        log.info("Received request to update product with id : {}", id);
         ProductResponse response = productService.updateProduct(id, request);
-
+        log.info("Product updated successfully with id : {}", id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -80,9 +87,10 @@ public class ProductController {
     public ResponseEntity<ProductResponse> partiallyUpdateProduct(
             @PathVariable Long id,
             @RequestBody ProductRequest request) {
-
+        log.info("Received request to partially update product with id : {}", id);
         ProductResponse response =
                 productService.partiallyUpdateProduct(id, request);
+        log.info("Product partially updated with id : {}", id);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -94,9 +102,9 @@ public class ProductController {
     @DeleteMapping("/{id}/deleteProduct")
     public ResponseEntity<String> deleteProduct(
             @PathVariable Long id) {
-
+        log.info("Received request to delete product with id : {}", id);
         String response = productService.deleteById(id);
-
+        log.info("Product deleted successfully with id : {}", id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -108,9 +116,10 @@ public class ProductController {
     public ResponseEntity<List<Product>> getAllProductByProductName(
             @RequestParam String productName,
             @RequestParam String category) {
-
+        log.info("Received request to search products by name : {} and category : {}", productName, category);
         List<Product> products =
                 productService.getAllProductByProductName(productName, category);
+        log.info("Found {} matching products", products.size());
 
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
