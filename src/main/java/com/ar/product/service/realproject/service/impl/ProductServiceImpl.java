@@ -102,6 +102,178 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductResponse getProductByProductName(String productName) {
+
+        log.info("Searching product by name : {}", productName);
+
+        Product product =
+                productRepository.findByProductName(productName);
+
+        return mapEntityToResponse(product);
+    }
+
+    @Override
+    public List<ProductResponse> searchProductByKeyword(String keyword) {
+
+        log.info("Searching products containing keyword : {}", keyword);
+
+        List<Product> products =
+                productRepository.findByProductNameContaining(keyword);
+
+        log.info("Found {} matching products", products.size());
+
+        return products.stream()
+                .map(this::mapEntityToResponse)
+                .toList();
+    }
+
+
+    @Override
+    public List<ProductResponse> searchProductByKeywordIgnoreCase(String keyword) {
+
+        log.info("Searching products containing keyword (Ignore Case): {}", keyword);
+
+        List<Product> products =
+                productRepository.findByProductNameContainingIgnoreCase(keyword);
+
+        log.info("Found {} matching products", products.size());
+
+        return products.stream()
+                .map(this::mapEntityToResponse)
+                .toList();
+    }
+
+    @Override
+    public ProductResponse getProductBySku(String sku) {
+
+        log.info("Searching product by SKU : {}", sku);
+
+        Product product = productRepository.findBySku(sku)
+                .orElseThrow(() ->
+                        new ProductNotFoundException("Product not found with SKU : " + sku));
+
+        return mapEntityToResponse(product);
+    }
+
+    @Override
+    public List<ProductResponse> getProductsByCategory(String category) {
+
+        log.info("Searching products by category : {}", category);
+
+        List<Product> products =
+                productRepository.findByCategory(category);
+
+        log.info("Found {} products", products.size());
+
+        return products.stream()
+                .map(this::mapEntityToResponse)
+                .toList();
+    }
+
+
+    @Override
+    public List<ProductResponse> getProductsByStatus(Boolean status) {
+
+        log.info("Searching products by status : {}", status);
+
+        List<Product> products =
+                productRepository.findByStatus(status);
+
+        log.info("Found {} products", products.size());
+
+        return products.stream()
+                .map(this::mapEntityToResponse)
+                .toList();
+    }
+
+    @Override
+    public List<ProductResponse> getActiveProducts() {
+
+        log.info("Fetching active products");
+
+        List<Product> products =
+                productRepository.findByStatusTrue();
+
+        log.info("Found {} active products", products.size());
+
+        return products.stream()
+                .map(this::mapEntityToResponse)
+                .toList();
+    }
+
+    @Override
+    public List<ProductResponse> getInactiveProducts() {
+
+        log.info("Fetching inactive products");
+
+        List<Product> products =
+                productRepository.findByStatusFalse();
+
+        log.info("Found {} inactive products", products.size());
+
+        return products.stream()
+                .map(this::mapEntityToResponse)
+                .toList();
+    }
+
+    // Finding By Multiple Methods
+
+    @Override
+    public List<ProductResponse> getProductsByCategoryAndBrand(
+            String category,
+            String brand) {
+
+        log.info("Searching products by category : {} and brand : {}",
+                category, brand);
+
+        List<Product> products =
+                productRepository.findByCategoryAndBrand(category, brand);
+
+        log.info("Found {} matching products", products.size());
+
+        return products.stream()
+                .map(this::mapEntityToResponse)
+                .toList();
+    }
+
+    @Override
+    public List<ProductResponse> getProductsByCategoryOrBrand(
+            String category,
+            String brand) {
+
+        log.info("Searching products by category : {} OR brand : {}",
+                category, brand);
+
+        List<Product> products =
+                productRepository.findByCategoryOrBrand(category, brand);
+
+        log.info("Found {} matching products", products.size());
+
+        return products.stream()
+                .map(this::mapEntityToResponse)
+                .toList();
+    }
+
+
+    @Override
+    public List<ProductResponse> getProductsByCategoryAndStatus(
+            String category,
+            Boolean status) {
+
+        log.info("Searching products by category : {} and status : {}",
+                category, status);
+
+        List<Product> products =
+                productRepository.findByCategoryAndStatus(category, status);
+
+        log.info("Found {} matching products", products.size());
+
+        return products.stream()
+                .map(this::mapEntityToResponse)
+                .toList();
+    }
+
+    @Override
     public boolean updateStock(Long id, int quantity) {
         log.info("Updating Stock for Product {}: quantity{}",id,quantity);
         // now Fething the data with ID here

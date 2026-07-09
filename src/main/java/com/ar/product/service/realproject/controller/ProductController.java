@@ -124,6 +124,115 @@ public class ProductController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
+    @GetMapping("/name/{productName}")
+    public ResponseEntity<ProductResponse> getProductByProductName(
+            @PathVariable String productName){
+
+        return ResponseEntity.ok(
+                productService.getProductByProductName(productName)
+        );
+    }
+
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductResponse>> searchProductByKeyword(
+            @RequestParam String keyword){
+
+        return ResponseEntity.ok(
+                productService.searchProductByKeyword(keyword)
+        );
+    }
+
+    @GetMapping("/search-ignore-case")
+    public ResponseEntity<List<ProductResponse>> searchProductByKeywordIgnoreCase(
+            @RequestParam String keyword) {
+
+        return ResponseEntity.ok(
+                productService.searchProductByKeywordIgnoreCase(keyword)
+        );
+    }
+
+    @GetMapping("/sku/{sku}")
+    public ResponseEntity<ProductResponse> getProductBySku(
+            @PathVariable String sku){
+
+        return ResponseEntity.ok(
+                productService.getProductBySku(sku)
+        );
+    }
+
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<ProductResponse>> getProductsByCategory(
+            @PathVariable String category){
+
+        return ResponseEntity.ok(
+                productService.getProductsByCategory(category)
+        );
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<ProductResponse>> getProductsByStatus(
+            @PathVariable Boolean status){
+
+        return ResponseEntity.ok(
+                productService.getProductsByStatus(status)
+        );
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<ProductResponse>> getActiveProducts(){
+
+        return ResponseEntity.ok(
+                productService.getActiveProducts()
+        );
+    }
+
+    @GetMapping("/inactive")
+    public ResponseEntity<List<ProductResponse>> getInactiveProducts(){
+
+        return ResponseEntity.ok(
+                productService.getInactiveProducts()
+        );
+    }
+
+    // Finding By Multiple Method
+
+    @GetMapping("/category-brand")
+    public ResponseEntity<List<ProductResponse>>
+    getProductsByCategoryAndBrand(
+
+            @RequestParam String category,
+            @RequestParam String brand){
+
+        return ResponseEntity.ok(
+                productService.getProductsByCategoryAndBrand(category, brand)
+        );
+    }
+
+    @GetMapping("/category-or-brand")
+    public ResponseEntity<List<ProductResponse>>
+    getProductsByCategoryOrBrand(
+
+            @RequestParam String category,
+            @RequestParam String brand){
+
+        return ResponseEntity.ok(
+                productService.getProductsByCategoryOrBrand(category, brand)
+        );
+    }
+
+    @GetMapping("/category-status")
+    public ResponseEntity<List<ProductResponse>>
+    getProductsByCategoryAndStatus(
+
+            @RequestParam String category,
+            @RequestParam Boolean status){
+
+        return ResponseEntity.ok(
+                productService.getProductsByCategoryAndStatus(category, status)
+        );
+    }
+
 
     // ==========================
     // Update Stock

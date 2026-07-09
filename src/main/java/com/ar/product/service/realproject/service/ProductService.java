@@ -29,6 +29,33 @@ public interface ProductService {
 
     // Search Products
     List<Product> getAllProductByProductName(String productName, String category);
+    ProductResponse getProductByProductName(String productName);
+    List<ProductResponse> searchProductByKeyword(String keyword);
+    List<ProductResponse> searchProductByKeywordIgnoreCase(String keyword);
+    ProductResponse getProductBySku(String sku);
+    List<ProductResponse> getProductsByCategory(String category);
+    List<ProductResponse> getProductsByStatus(Boolean status);
+    List<ProductResponse> getActiveProducts();
+    List<ProductResponse> getInactiveProducts();
+
+    List<ProductResponse> getProductsByCategoryAndBrand(String category,
+                                                        String brand); // Finding By Multiple Methods
+
+    List<ProductResponse> getProductsByCategoryOrBrand(String category,
+                                                       String brand);
+
+    List<ProductResponse> getProductsByCategoryAndStatus(String category,
+                                                         Boolean status);
+
+    //  Finding By JPQL Queries
+
+   /* List<ProductResponse> getActiveProducts();
+
+    List<ProductResponse> getProductsByCategory(String category);
+
+    List<ProductResponse> getProductsByBrandAndCategory(
+            String brand,
+            String category);*/
 
     boolean updateStock(Long id, int quantity);
 }
