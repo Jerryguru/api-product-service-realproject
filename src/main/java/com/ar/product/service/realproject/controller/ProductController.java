@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/products")
+@RestController // It creates a Rest API's
+@RequestMapping("/products") // this is Controller base URL.
 @Slf4j
 public class ProductController {
 

@@ -10,8 +10,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 //import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
-@Entity
-@Table(name="products")
+@Entity  // it will give the database table representation
+@Table(name="products")  //Database table name
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
