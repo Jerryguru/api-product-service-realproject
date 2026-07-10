@@ -5,6 +5,7 @@ import com.ar.product.service.realproject.model.ProductRequest;
 import com.ar.product.service.realproject.model.ProductResponse;
 import com.ar.product.service.realproject.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -232,6 +233,22 @@ public class ProductController {
                 productService.getProductsByCategoryAndStatus(category, status)
         );
     }
+    // ==========================
+    // Pagination & Sorting
+    // ==========================
+
+@GetMapping
+public ResponseEntity<Page<ProductResponse>> getAllProductsPaginated(
+        @RequestParam(defaultValue = "0")int page, // it is 0-index
+        @RequestParam(defaultValue = "10")int size, //Items Per page
+        @RequestParam(defaultValue = "id") String sortBy, //Field Sorted By
+        @RequestParam(defaultValue = "ASC")String  sortDir // Assending order or Dessending Order
+){
+        log.info("GET /api/products -page: {}, size: {}",page,size);
+       Page<ProductResponse> products = productService.getAllProductsPaginated(page,size,sortBy,sortDir);
+
+       return  new ResponseEntity<>(products,HttpStatus.OK);
+}
 
 
     // ==========================

@@ -8,6 +8,10 @@ import com.ar.product.service.realproject.model.ProductResponse;
 import com.ar.product.service.realproject.repository.ProductRepository;
 import com.ar.product.service.realproject.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -289,6 +293,18 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
         log.info("Product updated. New Stock:{}",newStock);
         return true;
+    }
+
+    //Pagination Method
+
+    @Override
+    public Page<ProductResponse> getAllProductsPaginated(int page, int size, String sortBy, String sortDir) {
+        Sort sort =sortDir.equalsIgnoreCase("asc")
+                ?Sort.by(sortBy).ascending()
+                :Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(page,size,sort);
+        return productRepository.findAll(pageable).map(this::mapEntityToResponse);
     }
 
 

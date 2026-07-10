@@ -4,6 +4,7 @@ package com.ar.product.service.realproject.service;
 import com.ar.product.service.realproject.entity.Product;
 import com.ar.product.service.realproject.model.ProductRequest;
 import com.ar.product.service.realproject.model.ProductResponse;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -58,6 +59,8 @@ public interface ProductService {
             String category);*/
 
     boolean updateStock(Long id, int quantity);
+
+    Page<ProductResponse> getAllProductsPaginated(int page, int size, String sortBy, String sortDir);
 }
 
 
